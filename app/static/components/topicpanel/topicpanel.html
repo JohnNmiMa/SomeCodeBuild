@@ -1,0 +1,20 @@
+<div id='topicPanel' class='panel panel-default' ng-show="isVisible">
+    <div class='panel-heading'>
+        <span id="topicTitle">Topics</span>
+        <a id="topicAdd" href="javascript:void(0)" ng-click="topicAdd()">
+            <span class="fa fa-plus" ng-class="{selected:isAddingTopic}"></span></a>
+        <a id="topicEdit" href="javascript:void(0)" ng-click="topicEdit()">
+            <span class="fa fa-pencil" ng-class="{selected:isEditingTopic}"></span></a>
+    </div>
+    <div class='panel-body'>
+        <ul class='list-group'>
+            <topic-add-form ng-show="isAddingTopic"></topic-add-form>
+        </ul>
+        <ul>
+            <topic ng-repeat="topic in topics"></topic>
+
+            <topic-delete-dialog></topic-delete-dialog>
+        </ul>
+    </div>
+    <topic-panel-resize-selector resizer-min="125px" resizer-max="60%"></topic-panel-resize-selector>
+</div>

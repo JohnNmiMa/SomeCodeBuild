@@ -1,0 +1,13 @@
+<div class="snippet" ng-mouseleave="hideSnippetPopup()">
+    <div class="snippetSelector" ng-mouseenter="showSnippetPopup()">
+        <span class="glyphicon fa-2x"
+              ng-class="{'glyphicon-eye-open':snip.access, 'glyphicon-eye-close':!snip.access}"></span>
+    </div>
+    <div class="snippetContent container-fluid">
+        <snippet-popup ng-show="snippetPopupVisible"></snippet-popup>
+
+        <snippet-form-bar ng-show="isEditing || isAdding"></snippet-form-bar>
+
+        <snippet-form></snippet-form>
+    </div>
+</div>
