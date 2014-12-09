@@ -27,7 +27,7 @@ FACEBOOK_APP_SECRET = '35c9ceef9f1e43194ee9ef0e220680fb'
 #TWITTER_APP_KEY = 'fUAYjkBwFYf8Vp1Qsjy642krI'
 #TWITTER_APP_SECRET = 'JI5O84Qrup8HBY74hIfD6tSLnGv4TGBIUj3UCXhi0Tp3MWxRWN'
 # for somecode.pythonanywhere.com
-TWITTER_CALLBACK_URL = 'http://somecode.pythonanywhere.com:5000'
+TWITTER_CALLBACK_URL = 'http://somecode.pythonanywhere.com'
 TWITTER_APP_KEY = '4sR3apqOJKeLPdJxFWxiJc5sH'
 TWITTER_APP_SECRET = 'QdlDF3DE7HJuQOKYQgBTpztQCKLqIGYZD8pJjFmCcFCFty9GEr'
 
@@ -52,7 +52,7 @@ google = {
 twitter = {
     'request_token_url': 'https://api.twitter.com/oauth/request_token',
     'access_token_url': 'https://api.twitter.com/oauth/access_token',
-    'authenticate_url': 'https://api.twitter.com/oauth/authenticate',
+    'authenticate_url': 'https://api.twitter.com/oauth/authorize',
     'callback_uri': TWITTER_CALLBACK_URL,
     'consumer_key': TWITTER_APP_KEY,
     'consumer_secret': TWITTER_APP_SECRET

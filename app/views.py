@@ -432,14 +432,13 @@ def twitter_authorized():
                       verifier=request.args.get('oauth_verifier'))
         r = requests.post(twitter['access_token_url'], auth=auth)
         profile = dict(parse_qsl(r.text))
-        app.logger.debug("Profile = ", profile)
-        app.logger.debug(profile)
+        #app.logger.debug("Profile = ", profile)
+        #app.logger.debug(profile)
         screen_name = profile['screen_name']
         twitter_id = profile['user_id']
 
         #session['logged_in'] = True
         #print("response user_id and screen_name = {} and {}").format(twitter_id, screen_name)
-        app.logger.debug("Response user_id and screen_name = %s and %s", twitter_id, screen_name)
 
         # See if user is already in the db
         user = User.query.filter_by(twitter_id = twitter_id).first()
@@ -465,9 +464,9 @@ def twitter_authorized():
         oauth = OAuth1(twitter['consumer_key'],
                        client_secret=twitter['consumer_secret'],
                        callback_uri=twitter['callback_uri'])
-        app.logger.debug("oauth consumer key = %s", twitter['consumer_key'])
-        app.logger.debug("oauth consumer secret = %s", twitter['consumer_secret'])
-        app.logger.debug("oauth callback URI = %s", twitter['callback_uri'])
+        #app.logger.debug("oauth consumer key = %s", twitter['consumer_key'])
+        #app.logger.debug("oauth consumer secret = %s", twitter['consumer_secret'])
+        #app.logger.debug("oauth callback URI = %s", twitter['callback_uri'])
 
         r = requests.post(twitter['request_token_url'], auth=oauth)
         oauth_token = dict(parse_qsl(r.text))
