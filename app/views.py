@@ -463,10 +463,10 @@ def twitter_authorized():
     else:
         oauth = OAuth1(twitter['consumer_key'],
                        client_secret=twitter['consumer_secret'],
-                       callback_uri=twitter['callback_uri'])
+                       callback_uri=request.url_root)
         #app.logger.debug("oauth consumer key = %s", twitter['consumer_key'])
         #app.logger.debug("oauth consumer secret = %s", twitter['consumer_secret'])
-        #app.logger.debug("oauth callback URI = %s", twitter['callback_uri'])
+        #app.logger.debug("oauth callback URI = %s", request.url_root)
 
         r = requests.post(twitter['request_token_url'], auth=oauth)
         oauth_token = dict(parse_qsl(r.text))
