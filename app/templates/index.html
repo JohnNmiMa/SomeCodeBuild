@@ -3,17 +3,18 @@
 <head>
     <!--For iOS devices-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./../static/combined-87808591.css"/>
+    <link rel="stylesheet" href="./../static/combined-7e25b556.css"/>
     <meta charset='UTF-8' />
     <title>SomeCode App</title>
 </head>
 
-<body ng-controller="SomeCodeCtrl">
+<body ng-controller="SomeCodeCtrl" device-detector>
     <div ng-include src="'./static/components/header/header.html'"></div>
     <div ng-view></div>
+    <span public_counter="{{public_count}}" style="display:none"></span>
 
     <div>
-        <script src="./../static/combined-4a0197b4.js"></script>
+        <script src="./../static/combined-dae5dda5.js"></script>
     </div>
 </body>
 </html>

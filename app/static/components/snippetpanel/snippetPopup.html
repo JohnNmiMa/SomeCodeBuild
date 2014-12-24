@@ -1,9 +1,9 @@
 <div class="snippetPopup">
     <button type="button" class="btn btn-danger btn-xs layout snip-it">Snip it</button>
-    <button type="button" class="btn btn-default btn-xs layout toggleLineWrap"
-            ng-style="wrapStrikeStyle" ng-click="toggleLineWrap()">Wrap</button>
     <button type="button" class="btn btn-default btn-xs layout toggleScroll"
             ng-style="scrollStrikeStyle" ng-click="toggleScroll()">Scroll</button>
+    <button type="button" class="btn btn-default btn-xs layout toggleLineWrap"
+            ng-style="wrapStrikeStyle" ng-click="toggleLineWrap()">Wrap</button>
     <button type="button" class="btn btn-default btn-xs layout toggleLineNumbers"
             ng-style="lineNumberStrikeStyle" ng-click="toggleLineNumbers()">Line #</button>
     <div class="layout snippetRowLayout" ng-click="setLayout('row')">
@@ -21,7 +21,7 @@
     <div ng-if="isSnippetOwnedByCurrentUser(snip.creator_id)" class="layout snippetEdit" ng-click="snippetEdit(snip)">
         <span class="fa fa-pencil-square-o fa-2x"></span>
     </div>
-    <div ng-if="isSnippetOwnedByCurrentUser(snip.creator_id)" class="layout snippetDelete" ng-click="snippetDelete(snip)">
+    <div ng-if="isSnippetOwnedByCurrentUser(snip.creator_id)" class="layout snippetDelete" ng-click="initiateSnippetDelete(snip)">
         <span class="fa fa-times fa-2x"></span>
     </div>
 </div>

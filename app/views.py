@@ -16,6 +16,14 @@ from datetime import datetime, timedelta
 from sqlalchemy import desc
 
 
+def getSnippetCounts():
+    topics = g.user.topics
+    personal_count = 0
+    for i, topic in enumerate(topics):
+        personal_count += topic.snippets.count()
+    public_count = Snippet.query.filter_by(access=ACCESS_PUBLIC).count()
+    return {'personal_count':personal_count, 'public_count':public_count}
+
 def create_jwt_token(user):
     payload = {
         'iss': 'somecode',
@@ -69,8 +77,8 @@ def before_request():
 @app.route('/')
 @app.route('/index')
 def index():
-    #public_count = Snippet.query.filter_by(access=ACCESS_PUBLIC).count()
-    return render_template('index.html')
+    public_count = Snippet.query.filter_by(access=ACCESS_PUBLIC).count()
+    return render_template('index.html', public_count = public_count)
 
 
 @app.route('/topics')
@@ -85,7 +93,7 @@ def user():
         topicList.append(d)
     public_count = Snippet.query.filter_by(access=ACCESS_PUBLIC).count()
 
-    reply = {'personal_count':personal_count, 'public_count':public_count, 'topics':topicList}
+    reply = {'topics':topicList, 'snippet_counts':{'personal_count':personal_count, 'public_count':public_count}}
     return Response(json.dumps(reply), 200, mimetype="application/json")
 
 
@@ -132,6 +140,7 @@ def topic(atopic):
         reply = dict(id = atopic, new_general_snippets = snippets_added_to_general)
         return Response(json.dumps(reply), 200, mimetype="application/json")
 
+
 @app.route('/snippets/<topic>', methods = ['POST', 'PUT', 'GET', 'DELETE'])
 @login_required
 def snippets(topic):
@@ -146,7 +155,7 @@ def snippets(topic):
         if (request.data):
             data = json.loads(request.data)
         access = ACCESS_PRIVATE;
-        if data.get('access') == 'on':
+        if data.get('access') == True:
             access = ACCESS_PUBLIC;
         title = data['title']
         description = data['description']
@@ -159,8 +168,11 @@ def snippets(topic):
                           creator_id = g.user.id, language = language, access = access)
         db.session.add(snippet)
         db.session.commit()
+
         d = dict(title = snippet.title, description = snippet.description, code = snippet.code,
-                 language = snippet.language, access = snippet.access, creator_id = snippet.creator_id, id = snippet.id)
+                 language = snippet.language, access = snippet.access,
+                 creator_id = snippet.creator_id, id = snippet.id,
+                 topic = snippet.topic.topic, snippet_counts = getSnippetCounts())
         return Response(json.dumps(d), 200, mimetype="application/json")
 
     elif request.method == 'PUT':
@@ -178,18 +190,18 @@ def snippets(topic):
 
         if (request.data):
             data = json.loads(request.data)
+        #pdb.set_trace()
         access = ACCESS_PRIVATE;
-        if data.get('access') == 'on':
+        if data.get('access') == True:
             access = ACCESS_PUBLIC;
 
-        #pdb.set_trace()
-        snippet.title = data['title'];
-        snippet.description = data['description'];
-        snippet.code = data['code'];
-        snippet.access = data['access'];
-        snippet.language = data['language'];
+        snippet.title = data['title']
+        snippet.description = data['description']
+        snippet.code = data['code']
+        snippet.access = access
+        snippet.language = data['language']
         db.session.commit()
-        return jsonify(id = snippet.id, creator_id = snippet.creator_id, access = snippet.access)
+        return jsonify(id = snippet.id, creator_id = snippet.creator_id, access = snippet.access, snippet_counts = getSnippetCounts())
 
     elif request.method == 'GET':
         """ Find all snippets associated with a topic """
@@ -203,7 +215,8 @@ def snippets(topic):
         snippetList = []
         for i, snip in enumerate(snippets):
             d = dict(title = snip.title, description = snip.description, code = snip.code,
-                     language = snip.language, access = snip.access, creator_id = snip.creator_id, id = snip.id)
+                     language = snip.language, access = snip.access,
+                     creator_id = snip.creator_id, id = snip.id, topic = snip.topic.topic)
             snippetList.append(d)
 
         return Response(json.dumps(snippetList), 200, mimetype="application/json")
@@ -221,14 +234,14 @@ def snippets(topic):
         if snippet == None:
             return jsonify(error=404, text='Invalid snippet ID'), 404
 
+        topicName = snippet.topic.topic
         if snippet.ref_count == 1:
             db.session.delete(snippet)
             db.session.commit()
-            return jsonify(id=snippet.id)
         else:
             snippet.dec_ref()
             db.session.commit()
-            return jsonify({id:snippet_id})
+        return jsonify({'id':snippet_id, 'topic':topicName, 'snippet_counts':getSnippetCounts()})
 
 
 @app.route('/snippets/search/personal', methods = ['GET'])
